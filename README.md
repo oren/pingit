@@ -14,25 +14,25 @@
 
 ## Using the mailer mobule seperately
 
-  mail = require('./lib/mailer')
+    mail = require('./lib/mailer')
 
-  // the mailer assume gmail is used for sending
-  config = {
-    email: '',
-    password: '',
-    to: 'uptime@foo.com',
-    from: 'uptime-robot@foo.com'
-  }
+    // the mailer assume gmail is used for sending
+    config = {
+      email: '',
+      password: '',
+      to: 'uptime@foo.com',
+      from: 'uptime-robot@foo.com'
+    }
 
-  mail({
-        config: config,
-        subject: 'foo is down',
-        body: '<p>foo did not responde</p>'
-      }, function (error, res) {
-        if (error) {
-          console.log(error);
-        }
-        else {
-          console.log(res);
-        }
-      })
+    mail({
+          config: config,
+          subject: 'foo is down',
+          body: '<p>foo did not responde</p>'
+        }, function (error, res) {
+          if (error) {
+            console.log(error);
+          }
+          else {
+            console.log(res);
+          }
+        })
