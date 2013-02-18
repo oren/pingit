@@ -1,6 +1,15 @@
 module.exports = {
-  email: '',
-  password: ''
+  mail: {
+    mailer: require('../lib/mailer.js'),
+    config: {
+      email: '',
+      password: '',
+      to: 'uptime@foo.com',
+      from: 'uptime-robot@foo.com'
+    }
+  }
 };
+
+// email and password are your gmail account you are using to send emails
 
 
