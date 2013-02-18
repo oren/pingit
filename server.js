@@ -1,12 +1,15 @@
 var Ping = require('./lib/ping');
 var websites = require('./websites');
 var http = require('http');
+var config = require('./config/config.js');
+
 var server;
 var port = process.env.PORT || 3000;
 var monitors = [];
  
 websites.forEach(function (website) {
   var monitor = new Ping ({
+    mail: config.mail,
     website: website.url,
     timeout: website.timeout
   });
