@@ -15,7 +15,7 @@
       "request":"~2.12.0",
       "nodemailer":"0.3.x"
    },
-   "author":"Qawelesizwe Mlilo",
+   "author":"oren",
    "license":"MIT",
    "engines":{
       "node":"0.8.x",
