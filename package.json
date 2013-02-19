@@ -1,11 +1,11 @@
 {
    "name":"pinger",
-   "version":"0.0.2",
+   "version":"0.0.1",
    "description":"Node uptime monitor",
    "main":"app.js",
    "repository":{
       "type":"git",
-      "url":"https://github.com/oren/pinger.git"
+      "url":"https://github.com/oren/pingit.git"
    },
    "keywords":[
       "uptime",
