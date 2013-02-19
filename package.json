@@ -5,7 +5,7 @@
    "main":"app.js",
    "repository":{
       "type":"git",
-      "url":"https://github.com/oren/node-ping.git"
+      "url":"https://github.com/oren/pinger.git"
    },
    "keywords":[
       "uptime",
