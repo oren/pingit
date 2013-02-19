@@ -1,5 +1,5 @@
 {
-   "name":"pinger",
+   "name":"pingit",
    "version":"0.0.1",
    "description":"Node uptime monitor",
    "main":"app.js",
