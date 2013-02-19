@@ -9,7 +9,7 @@ It emit 3 events - status, siteDown and siteUp
 
 ## Use
 
-    var pinger = require('pinger');
+    var ping = require('pingit');
 
     var websites = [
       {
@@ -22,24 +22,24 @@ It emit 3 events - status, siteDown and siteUp
       }
     ];
 
-    pinger.on('status', function(data) {
+    ping.on('status', function(data) {
       console.log('status event:', data);
     });
 
-    pinger.on('siteUp', function(data) {
+    ping.on('siteUp', function(data) {
       console.log('siteUp event:', data);
     });
 
-    pinger.on('siteDown', function(data) {
+    ping.on('siteDown', function(data) {
       console.log('siteDown event:', data);
     });
 
-    pinger.start(websites);                              // pass hash of websites
+    ping.start(websites);                              // pass hash of websites
 
 There are 2 more way to use it:
 
-    1. pinger.start();                                   // default to websites.js file in the local directory
-    2. pinger.start({pathToWebsites: "./websites.js"});  // location of websites.js file
+    1. ping.start();                                   // default to websites.js file in the local directory
+    2. ping.start({pathToWebsites: "./websites.js"});  // location of websites.js file
 
 
 siteDown and siteUp events are sending the following data:
