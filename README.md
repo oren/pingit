@@ -1,97 +1,52 @@
-# Node uptime monitor
+# Pinger - Node uptime monitor
+
+Event emitter that notify you if your sites are down.  
+It emit 3 events - status, siteDown and siteUp
 
 ## Install
 
-    npm install
+    npm install pinger
 
-## Setup
+## Use
 
-    cp config/config.js.example config/config.js
+    var pinger = require('pinger');
 
-## Run 
-
-    node server.js
-
-## Using the ping mobule seperately
-
-    pinger = require('./lib/pinger.js')
-
-    websites = [
+    var websites = [
       {
-      url: 'foo.com',
-      timeout: 0.1
+        url: 'foo.com',
+        timeout: 10    // minutes
       },
       {
         url: 'bar.com',
-        timeout: 0.1
+        timeout: 15
       }
-    ]
+    ];
 
-    pinger.start(websites)
-
-    pinger.on('siteDown', function(data) {
-      console.log(data);
+    pinger.on('status', function(data) {
+      console.log('status event:', data);
     });
 
-
-## Using the mailer mobule seperately
-
-    mail = require('./lib/mailer.js')
-
-    // the mailer assume gmail is used for sending
-    config = {
-      email: '',
-      password: '',
-      to: 'uptime@foo.com',
-      from: 'uptime-robot@foo.com'
-    }
-
-    mail({
-          config: config,
-          subject: 'foo is down',
-          body: '<p>foo did not responde</p>'
-        }, function (error, res) {
-          if (error) {
-            console.log(error);
-          }
-          else {
-            console.log(res);
-          }
-        })
-
-## Using both pinger and mailer
-
-    pinger = require('./lib/pinger.js')
-    mail = require('./lib/mailer.js')
-
-    pinger.start(websites)
-
-    pinger.on('siteDown', function(data) {
-      email(data);
+    pinger.on('siteUp', function(data) {
+      console.log('siteUp event:', data);
     });
 
-    config = {
-      email: 'orengolan@gmail.com',
-      password: 'aoeuht3#',
-      to: 'uptime@foo.com',
-      from: 'uptime-robot@foo.com'
+    pinger.on('siteDown', function(data) {
+      console.log('siteDown event:', data);
+    });
+
+    pinger.start(websites);                              // pass hash of websites
+
+There are 2 more way to use it:
+
+    1. pinger.start();                                   // default to websites.js file in the local directory
+    2. pinger.start({pathToWebsites: "./websites.js"});  // location of websites.js file
+
+
+siteDown and siteUp events are sending the following data:
+
+    { 
+      website: 'foo.com',
+      time: '2013-02-19 03:24:05',
+      status: 'DOWN',
+      message: undefined 
     }
-
-    function email(config, data) {
-      var htmlMsg = '<p>Time: ' + data.time;
-      htmlMsg +='</p><p>Website: ' + data..website;
-      htmlMsg += '</p><p>Message: ' + data.msg + '</p>';
-
-      mail({
-            config: config,
-            subject: data.website + ' is down',
-            body: htmlMsg
-          }, function (error, res) {
-            if (error) {
-              console.log(error);
-            }
-            else {
-              console.log(res);
-            }
-          })
-    };

@@ -1,19 +1,18 @@
 {
-   "name":"Ping",
+   "name":"pinger",
    "version":"0.0.1",
    "description":"Node uptime monitor",
    "main":"app.js",
    "repository":{
       "type":"git",
-      "url":"https://github.com/qawemlilo/ping.git"
+      "url":"https://github.com/oren/node-ping.git"
    },
    "keywords":[
       "uptime",
       "monitor"
    ],
    "dependencies":{
-      "request":"~2.12.0",
-      "nodemailer":"0.3.x"
+      "request":"~2.12.0"
    },
    "author":"oren",
    "license":"MIT",

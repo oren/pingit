@@ -1,13 +1,55 @@
+// core module
+var EventEmitter = require('events').EventEmitter;
 var request = require('request');
 var statusCodes = require('http').STATUS_CODES;
- 
-/*
-    Ping Constructor
-*/
-function Ping (opts) {
-  // holds website to be monitored
-  this.mail = null;
 
+var emitter = new EventEmitter();
+
+module.exports = emitter;
+module.exports.start = start;
+
+var monitors = [];
+var monitor = null;
+ 
+// start pinging websites 
+//
+// parameters
+// websites (optional) - hash with array of hashes - website and interval
+// or hash with single key - pathToWebsites
+// if no argument passed, it will try reading websites.js from current folder
+function start(websites) {
+  var sitesFile;
+
+  if (!websites) {
+    websites = readSitesFile('./websites.js');
+  } else if (websites.pathToWebsites) {
+    websites = readSitesFile(websites.pathToWebsites);
+  }
+  if (!websites) {
+    return null;
+  }
+
+  websites.forEach(function (website) {
+    monitor = new Ping ({
+      website: website.url,
+      timeout: website.timeout
+    });
+
+    monitors.push(monitor);
+  });
+}
+
+function readSitesFile(path) {
+  try {
+    return require(path);
+  } catch(e) {
+    emitter.emit('status', 'Error reading ' + path);
+    return null;
+  }
+};
+
+// Ping Constructor
+function Ping (opts) {
   // holds website to be monitored
   this.website = '';
 
@@ -21,20 +63,12 @@ function Ping (opts) {
   this.init(opts)
 }
 
-/*
-    Methods
-*/
- 
+// Methods
 Ping.prototype = {
   init: function (opts) {
     var self = this;
-
-    self.mail = opts.mail;
-
     self.website = opts.website;
-
     self.timeout = (opts.timeout * (60 * 1000));
-
     // start monitoring
     self.start();
   },
@@ -43,7 +77,7 @@ Ping.prototype = {
     var self = this;
     var time = Date.now();
 
-    console.log("\nLoading... " + self.website + "\nTime: " + self.getFormatedDate(time) + "\n");
+    emitter.emit('status', "\nMonitoring " + self.website + "\nTime: " + self.getFormatedDate(time) + "\n"); 
 
     // create an interval for pings
     self.handle = setInterval(function () {
@@ -81,43 +115,27 @@ Ping.prototype = {
   },
 
   isNotOk: function (statusCode) {
-    var time =  Date.now();
     var self = this;
-    time = self.getFormatedDate(time);
     var msg = statusCodes[statusCode + ''];
 
-    var htmlMsg = '<p>Time: ' + time;
-    htmlMsg +='</p><p>Website: ' + self.website;
-    htmlMsg += '</p><p>Message: ' + msg + '</p>';
-
     this.log('DOWN', msg);
-
-    // Send admin and email
-    self.mail.mailer({
-      config: self.mail.config,
-      subject: self.website + ' is down',
-      body: htmlMsg
-    }, function (error, res) {
-      if (error) {
-        console.log(error);
-      }
-      else {
-        console.log(res);
-      }
-    });
   },
 
   log: function (status, msg) {
     var self = this;
-    var time = Date.now();
-    var output = '';
 
-    output += "\nWebsite: " + self.website;
-    output += "\nTime: " + time;
-    output += "\nStatus: " + status;
-    output += "\nMessage:" + msg  + "\n";
+    var output = {
+      website: self.website,
+      time: self.getFormatedDate(Date.now()),
+      status: status,
+      message: msg
+    };
 
-    console.log(output);
+    if (status === 'DOWN') {
+      emitter.emit('siteDown', output); 
+    } else {
+      emitter.emit('siteUp', output); 
+    }
   },
 
   getFormatedDate: function (time) {
@@ -130,5 +148,3 @@ Ping.prototype = {
     return currentDate;
   }
 }
-
-module.exports = Ping;

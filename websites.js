@@ -1,13 +1,13 @@
-/*
-    List of websites to be monitored
-*/
+// List of websites to be monitored
+// timeout in minutes
+
 module.exports = [
   {
-    url: 'foo.com',
-    timeout: 0.1
+    url: 'http://foo.com',
+    timeout: 10
   },
   {
-    url: 'http://dev-push.int.yp.com/health',
-    timeout: 0.1
+    url: 'http://bar.com/health',
+    timeout: 5
   }
 ];
