@@ -90,7 +90,7 @@ Ping.prototype = {
 
     try {
       // send request
-      request(self.website, function (error, res, body) {
+      request({method: 'HEAD', uri: self.website}, function (error, res, body) {
         // Website is up
         if (!error && res.statusCode === 200) {
           self.isOk();
